@@ -4,7 +4,7 @@ import { View } from "react-native";
 
 export function NavBar() {
     return (
-        <View className="flex-row justify-center items-center bg-primary/80 py-8 absolute bottom-0">
+        <View className="flex-row justify-center items-center bg-primary/80 py-5 absolute bottom-0">
             <View className="flex-1 justify-center items-center">
                 <Link href='/'>
                     <FontAwesome5 name='home' size={25} color={'#fff'} />

@@ -7,28 +7,38 @@ import { useState, useEffect } from "react";
 import { api } from "../api/api.js";
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+interface IHome {
+    userId: number
+    ranking: {
+        pontos: number
+        posicao: string
+    }
+    contents: {
+        title: string
+        blocked: boolean
+    }[]
+}
+
 export default function Home() {
 
-    const [home, setHome] = useState<any>();
+    const [home, setHome] = useState<IHome>();
 
     async function getHomeData() {
-      const { data } = await api.get("/home");
-      if (data) {
-        setHome(data);
-      }
+        const { data } = await api.get("/home");
+        if (data) {
+            setHome(data);
+        }
     }
-  
+
     useEffect(() => {
-      getHomeData();
+        getHomeData();
     }, []);
-  
-    console.log(home);
 
     const image = { uri: 'https://images.unsplash.com/photo-1559825481-12a05cc00344?q=80&w=1530&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <View className="flex-1 bg-background gap-4">
+            <View className="flex-1 bg-background gap-4 pt-4">
                 <View className='px-2'>
                     <View className='w-full mb-6 px-4 flex-row justify-between items-center'>
                         <View>
@@ -40,15 +50,15 @@ export default function Home() {
                         </Link>
                     </View>
                     <FlatList
-                        data={['Conteudo 1', 'Conteudo 2', 'Conteudo 3', 'Conteudo 4']}
-                        keyExtractor={item => item}
+                        data={home?.contents}
+                        keyExtractor={(item, index) => index.toString()}
                         renderItem={({ item }) => {
                             return (
-                                <Link href='/task' className='flex-1 w-full mx-2'>
+                                <Link href={item.blocked ? '/' : '/task'} className='flex-1 w-full mx-2'>
                                     <ImageBackground source={image} resizeMode="cover" className="h-64 w-48 bg-black justify-center items-center">
                                         <View style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', flex: 1, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                                            {/* <FontAwesome5 name="lock" size={20} color={colors.primary} /> */}
-                                            <Text className="font-bold text-xl text-white">{item}</Text>
+                                            {item.blocked ? <FontAwesome5 name="lock" size={20} color={'#fff'} /> : ''}
+                                            <Text className="font-bold text-xl text-white text-center">{item.title}</Text>
                                         </View>
                                     </ImageBackground>
                                 </Link>
@@ -65,10 +75,10 @@ export default function Home() {
                                 <View>
                                     <FontAwesome5 name='trophy' color={colors.secondary} />
                                 </View>
-                                <Text className='font-bold text-white ml-2'>1°</Text>
+                                <Text className='font-bold text-white ml-2'>{home?.ranking.posicao}</Text>
                             </View>
                             <View className='flex-row bg-primary rounded-full px-4 py-1'>
-                                <Text className='font-bold text-white'>50</Text>
+                                <Text className='font-bold text-white'>{home?.ranking.pontos}</Text>
                                 <Text className='text-white'> pontos</Text>
                             </View>
 
@@ -89,7 +99,7 @@ export default function Home() {
                                 <View>
                                     <FontAwesome5 name='coins' color={colors.secondary} />
                                 </View>
-                                <Text className='text-white font-bold ml-2'> 500 </Text>
+                                <Text className='text-white font-bold ml-2'>{home?.ranking.pontos}</Text>
                             </Link>
                             <View className='flex-row bg-primary rounded-full px-4 py-1'>
                                 {/* <View className='justify-center items-center bg-primary/60 '>
@@ -99,20 +109,22 @@ export default function Home() {
                             </View>
                         </View>
                     </View>
-                    <View className='px-6 py-8 bg-primary/80 flex-row gap-8 items-center justify-between'>
-                        <Link href='/ocean'>
-                            <Feather name="plus-circle" size={50} color={colors.secondary} />
-                        </Link>
-                        <Link href='/ocean'>
-                            <Feather name="plus-circle" size={50} color={colors.secondary} />
-                        </Link>
-                        <Link href='/ocean'>
-                            <Feather name="plus-circle" size={50} color={colors.secondary} />
-                        </Link>
-                        <Link href='/ocean'>
-                            <Feather name="plus-circle" size={50} color={colors.secondary} />
-                        </Link>
-                    </View>
+                    <ImageBackground resizeMode='stretch' source={require('@/assets/deepsea.png')}>
+                        <View className='px-6 py-8 flex-row gap-8 items-center justify-between'>
+                            <Link href='/ocean'>
+                                <Feather name="plus-circle" size={50} color={colors.secondary} />
+                            </Link>
+                            <Link href='/ocean'>
+                                <Feather name="plus-circle" size={50} color={colors.secondary} />
+                            </Link>
+                            <Link href='/ocean'>
+                                <Feather name="plus-circle" size={50} color={colors.secondary} />
+                            </Link>
+                            <Link href='/ocean'>
+                                <Feather name="plus-circle" size={50} color={colors.secondary} />
+                            </Link>
+                        </View>
+                    </ImageBackground>
                 </View>
             </View>
             <NavBar />
