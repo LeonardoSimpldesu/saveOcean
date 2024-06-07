@@ -1,17 +1,43 @@
+import { api } from "@/api/api";
 import { colors } from "@/styles/colors";
 import { FontAwesome5 } from "@expo/vector-icons";
 import Checkbox from "expo-checkbox";
 import { Link, router } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
+
+interface IForm {
+    userId: number
+    contentTask: {
+        title: string
+        text: string
+    }
+    questions: {
+        question: string
+        options: {
+            value: string
+        }[]
+    }[]
+}
 
 export default function Forms() {
     const [isChecked, setIsChecked] = useState(false)
     const [page, setPage] = useState(1)
-    const TOTALOFPAGES = 2
+    const [task, setTask] = useState<IForm>();
+
+    async function getTaskData() {
+        const { data } = await api.get("/Task/contentTask");
+        if (data) {
+            setTask(data);
+        }
+    }
+
+    useEffect(() => {
+        getTaskData();
+    }, []);
 
     function handleIncrement() {
-        if (TOTALOFPAGES > page) {
+        if (3 > page) {
             setPage(page + 1)
         } else {
             return router.replace('/certificated')
@@ -24,12 +50,13 @@ export default function Forms() {
             setPage(page - 1)
         }
     }
+
     return (
         <View className="flex-1 pt-10 bg-background">
             <View className="flex-row justify-between items-center px-4">
                 <View className="flex-row items-center gap-2">
                     <TouchableOpacity onPress={handleDecrement}>
-                        <FontAwesome5 name='arrow-left' size={25} color={colors.primary}/>
+                        <FontAwesome5 name='arrow-left' size={25} color={colors.primary} />
                     </TouchableOpacity>
                     <Text> 1 / 3</Text>
                 </View>
@@ -63,24 +90,14 @@ export default function Forms() {
                 </View>
             </View> : <View></View>}
             {page === 2 ? <View className="flex-1 px-4 pt-12 gap-12">
-                <Text className="font-bold text-lg">Marque as palavras corretas de acordo com o que você aprendeu com os conteúdos passados:</Text>
+                <Text className="font-bold text-lg">{task?.questions[0].question}</Text>
                 <View className="gap-4">
-                    <View className="flex-row gap-2">
-                        <Checkbox value={isChecked} onValueChange={setIsChecked} color={isChecked ? '#4630EB' : undefined}></Checkbox>
-                        <Text className="font-medium">O oceano é poluido por esgotos mal localizados</Text>
-                    </View>
-                    <View className="flex-row gap-2">
-                        <Checkbox value={isChecked} onValueChange={setIsChecked} color={isChecked ? '#4630EB' : undefined}></Checkbox>
-                        <Text className="font-medium">O oceano é poluido por esgotos mal localizados</Text>
-                    </View>
-                    <View className="flex-row gap-2">
-                        <Checkbox value={isChecked} onValueChange={setIsChecked} color={isChecked ? '#4630EB' : undefined}></Checkbox>
-                        <Text className="font-medium">O oceano é poluido por esgotos mal localizados</Text>
-                    </View>
-                    <View className="flex-row gap-2">
-                        <Checkbox value={isChecked} onValueChange={setIsChecked} color={isChecked ? '#4630EB' : undefined}></Checkbox>
-                        <Text className="font-medium">O oceano é poluido por esgotos mal localizados</Text>
-                    </View>
+                    {task?.questions[0].options.map((options, index) => (
+                        <View className="flex-row gap-2" key={index}>
+                            <Checkbox value={isChecked} onValueChange={setIsChecked} color={isChecked ? '#4630EB' : undefined}></Checkbox>
+                            <Text className="font-medium">{options.value}</Text>
+                        </View>
+                    ))}
                 </View>
             </View> : <View></View>}
             {page === 3 ? <View className="flex-1 px-4 pt-12 gap-12">

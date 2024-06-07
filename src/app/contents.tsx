@@ -14,6 +14,7 @@ interface IContents {
     certified: boolean,
     points: number,
     image: string
+    algasProgress: number
   }[]
 }
 
@@ -66,6 +67,7 @@ export default function Contents() {
         data={contents?.contents}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => {
+          const porcentagem = item.algasProgress * 20
           return (
             <View className="w-full flex-row mb-6 px-5">
               <View className="p-4 gap-2 bg-primary/50 justify-center items-center mx-2 rounded-lg">
@@ -79,7 +81,7 @@ export default function Contents() {
                   </View> : ''}
                 </ImageBackground>
                 <View className="w-24 h-3 rounded-full bg-gray-500 overflow-hidden">
-                  <View className="w-[0] h-3 bg-blue-500"></View>
+                  <View className="h-3 bg-blue-500" style={{ width: `${porcentagem}%` }}></View>
                 </View>
               </View>
               <View className="flex-1 justify-center">
@@ -92,7 +94,7 @@ export default function Contents() {
                       </View>
                       <Text className="text-white font-bold ml-2"> {item.points} </Text>
                     </View>
-                    <View className="flex-row">
+                    {item.algasProgress === 3 ? <View className="flex-row">
                       <Image
                         source={require("@/assets/seaweed.png")}
                         className="size-4"
@@ -102,6 +104,24 @@ export default function Contents() {
                         className="size-4"
                       />
                       <Image
+                        source={require("@/assets/seaweed.png")}
+                        className="size-4"
+                      />
+                      <Image
+                        source={require("@/assets/seaweed-black.png")}
+                        className="size-4"
+                      />
+                      <Image
+                        source={require("@/assets/seaweed-black.png")}
+                        className="size-4"
+                      />
+                    </View> : <View className="flex-row">
+
+                      <Image
+                        source={require("@/assets/seaweed-black.png")}
+                        className="size-4"
+                      />
+                      <Image
                         source={require("@/assets/seaweed-black.png")}
                         className="size-4"
                       />
@@ -113,7 +133,12 @@ export default function Contents() {
                         source={require("@/assets/seaweed-black.png")}
                         className="size-4"
                       />
-                    </View>
+                      <Image
+                        source={require("@/assets/seaweed-black.png")}
+                        className="size-4"
+                      />
+                    </View>}
+
                   </View>
                   {item.certified ? (
                     <View className="size-12 bg-primary/80 justify-center items-center rounded-full justify-self-end self-end">
