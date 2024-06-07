@@ -1,14 +1,15 @@
-import { FlatList, ImageBackground, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, ImageBackground, Text, View } from 'react-native'
 import { Feather, FontAwesome, FontAwesome5 } from '@expo/vector-icons'
 import { colors } from '@/styles/colors'
 import { Link } from 'expo-router'
 import { NavBar } from '@/components/nav-bar'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function Home() {
     const image = { uri: 'https://images.unsplash.com/photo-1559825481-12a05cc00344?q=80&w=1530&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }
     return (
-        <View className='flex-1'>
-            <View className="flex-1 bg-background pt-20">
+        <SafeAreaView style={{ flex: 1 }}>
+            <View className="flex-1 bg-background gap-4">
                 <View className='px-2'>
                     <View className='w-full mb-6 px-4 flex-row justify-between items-center'>
                         <View>
@@ -24,14 +25,14 @@ export default function Home() {
                         keyExtractor={item => item}
                         renderItem={({ item }) => {
                             return (
-                                <ImageBackground source={image} resizeMode="cover" className="h-64 w-48 bg-black justify-center items-center mx-2">
-                                    <Link href='/task' className='flex-1 w-full'>
+                                <Link href='/task' className='flex-1 w-full mx-2'>
+                                    <ImageBackground source={image} resizeMode="cover" className="h-64 w-48 bg-black justify-center items-center">
                                         <View style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', flex: 1, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
                                             {/* <FontAwesome5 name="lock" size={20} color={colors.primary} /> */}
                                             <Text className="font-bold text-xl text-white">{item}</Text>
                                         </View>
-                                    </Link>
-                                </ImageBackground>
+                                    </ImageBackground>
+                                </Link>
                             )
                         }}
                         horizontal
@@ -95,15 +96,7 @@ export default function Home() {
                     </View>
                 </View>
             </View>
-            <TouchableOpacity
-                activeOpacity={0.7}
-                className="w-full h-14 bg-orange-500 items-center justify-center rounded-lg"
-            >
-                <Text className="text-green-500 text-base font-bold uppercase">
-                    FODASE O EXEMPLO
-                </Text>
-            </TouchableOpacity>
             <NavBar />
-        </View>
+        </SafeAreaView >
     )
 }
