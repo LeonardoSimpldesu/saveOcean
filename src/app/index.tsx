@@ -3,13 +3,32 @@ import { Feather, FontAwesome, FontAwesome5 } from '@expo/vector-icons'
 import { colors } from '@/styles/colors'
 import { Link } from 'expo-router'
 import { NavBar } from '@/components/nav-bar'
+import { useState, useEffect } from "react";
+import { api } from "../api/api.js";
 
 export default function Home() {
+
+    const [home, setHome] = useState<any>();
+
+    async function getHomeData() {
+      const { data } = await api.get("/home");
+      if (data) {
+        setHome(data);
+      }
+    }
+  
+    useEffect(() => {
+      getHomeData();
+    }, []);
+  
+    console.log(home);
+
     const image = { uri: 'https://images.unsplash.com/photo-1559825481-12a05cc00344?q=80&w=1530&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }
 
     return (
         <View className='flex-1'>
             <View className="flex-1 bg-background pt-20">
+            <Text className='bg-blue-300 self-center'>{home?.ranking?.pontos}</Text>
                 <View className='px-2'>
                     <View className='w-full mb-6 px-4 flex-row justify-between items-center'>
                         <View>
