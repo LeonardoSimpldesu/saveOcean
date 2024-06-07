@@ -3,10 +3,29 @@ import { Feather, FontAwesome, FontAwesome5 } from '@expo/vector-icons'
 import { colors } from '@/styles/colors'
 import { Link } from 'expo-router'
 import { NavBar } from '@/components/nav-bar'
+import { useState, useEffect } from "react";
+import { api } from "../api/api.js";
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function Home() {
+
+    const [home, setHome] = useState<any>();
+
+    async function getHomeData() {
+      const { data } = await api.get("/home");
+      if (data) {
+        setHome(data);
+      }
+    }
+  
+    useEffect(() => {
+      getHomeData();
+    }, []);
+  
+    console.log(home);
+
     const image = { uri: 'https://images.unsplash.com/photo-1559825481-12a05cc00344?q=80&w=1530&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View className="flex-1 bg-background gap-4">
